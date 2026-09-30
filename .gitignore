@@ -8,7 +8,7 @@
 node_modules/
 .pnpm-store/
 .pnp
-.pnp.js
+.pnp.*
 
 # ── Next.js / build ──
 .next/
