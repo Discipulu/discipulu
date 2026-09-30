@@ -1,0 +1,11 @@
+.git
+.next
+node_modules
+storybook-static
+supabase
+.env*
+!.env.example
+.vercel
+*.log
+*.tsbuildinfo
+next-env.d.ts

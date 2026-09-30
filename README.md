@@ -44,6 +44,21 @@ Estrutura de `src/`:
 - `lib/` — utilitários e clientes compartilhados; `lib/supabase/` tem os clientes de browser, servidor e proxy de sessão
 - `proxy.ts` — renova a sessão a cada requisição e protege `/app`
 
+## Rodando em Docker
+
+O app não depende da Vercel: a imagem roda `next start` em qualquer host com Docker.
+
+```bash
+docker build -t discipulu \
+  --build-arg NEXT_PUBLIC_SUPABASE_URL=... \
+  --build-arg NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=... .
+docker run -p 3000:3000 \
+  -e NEXT_PUBLIC_SUPABASE_URL=... \
+  -e NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=... discipulu
+```
+
+As variáveis `NEXT_PUBLIC_*` entram no build (vão para o JavaScript do navegador) e também em tempo de execução (servidor). A URL do Supabase precisa ser alcançável de dentro do container: com o Supabase local, use `http://host.docker.internal:54321`. O endereço público do app precisa estar nos redirects do Auth do Supabase (`additional_redirect_urls`).
+
 ## Contribuindo
 
 Contribuições externas ainda não estão abertas. Quando estiverem, o processo (incluindo o CLA) será descrito em `CONTRIBUTING.md`. Até lá, bugs e sugestões são bem-vindos como issues.
