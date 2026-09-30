@@ -13,6 +13,32 @@ Disponível como serviço em [discipulu.com.br](https://discipulu.com.br) ou par
 - Tailwind CSS + [shadcn/ui](https://ui.shadcn.com), com componentes documentados no Storybook
 - pnpm
 
+## Desenvolvimento
+
+Requisitos: Node.js 22 ou mais recente e pnpm (a versão está fixada em `packageManager`; `corepack enable` resolve).
+
+```bash
+pnpm install
+pnpm dev              # app em http://localhost:3000
+pnpm storybook        # Storybook em http://localhost:6006
+```
+
+| Script                 | O que faz                            |
+| ---------------------- | ------------------------------------ |
+| `pnpm lint`            | ESLint                               |
+| `pnpm typecheck`       | Gera os tipos de rota e roda o `tsc` |
+| `pnpm format`          | Formata com Prettier                 |
+| `pnpm format:check`    | Confere a formatação sem alterar     |
+| `pnpm build`           | Build de produção do Next.js         |
+| `pnpm build-storybook` | Build estático do Storybook          |
+
+Estrutura de `src/`:
+
+- `app/` — rotas (App Router)
+- `features/<modulo>/` — domínio por módulo: queries, actions, schemas e componentes próprios
+- `components/` — componentes compartilhados; `components/ui/` são os do shadcn/ui
+- `lib/` — utilitários e clientes compartilhados
+
 ## Contribuindo
 
 Contribuições externas ainda não estão abertas. Quando estiverem, o processo (incluindo o CLA) será descrito em `CONTRIBUTING.md`. Até lá, bugs e sugestões são bem-vindos como issues.
