@@ -15,13 +15,17 @@ Disponível como serviço em [discipulu.com.br](https://discipulu.com.br) ou par
 
 ## Desenvolvimento
 
-Requisitos: Node.js 22 ou mais recente e pnpm (a versão está fixada em `packageManager`; `corepack enable` resolve).
+Requisitos: Node.js 22 ou mais recente, pnpm (a versão está fixada em `packageManager`; `corepack enable` resolve), Docker e o [Supabase CLI](https://supabase.com/docs/guides/local-development/cli/getting-started).
 
 ```bash
 pnpm install
+supabase start        # Postgres, Auth e Mailpit locais; aplica as migrations
+cp .env.example .env.local
 pnpm dev              # app em http://localhost:3000
 pnpm storybook        # Storybook em http://localhost:6006
 ```
+
+Preencha o `.env.local` com a `Project URL` e a chave `Publishable` que o `supabase status` mostra. Os e-mails de confirmação de cadastro chegam no Mailpit (http://127.0.0.1:54324). `supabase db reset` recria o banco local a partir de `supabase/migrations/` e `supabase/seed.sql`; `supabase stop` desliga a stack e mantém os dados.
 
 | Script                 | O que faz                            |
 | ---------------------- | ------------------------------------ |
@@ -37,7 +41,8 @@ Estrutura de `src/`:
 - `app/` — rotas (App Router)
 - `features/<modulo>/` — domínio por módulo: queries, actions, schemas e componentes próprios
 - `components/` — componentes compartilhados; `components/ui/` são os do shadcn/ui
-- `lib/` — utilitários e clientes compartilhados
+- `lib/` — utilitários e clientes compartilhados; `lib/supabase/` tem os clientes de browser, servidor e proxy de sessão
+- `proxy.ts` — renova a sessão a cada requisição e protege `/app`
 
 ## Contribuindo
 
