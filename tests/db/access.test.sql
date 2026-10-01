@@ -318,7 +318,8 @@ select results_eq(
 );
 
 select results_eq(
-  $$select action, record_id from app.audit_log where table_name = 'church_member_congregations'$$,
+  $$select action, record_id from app.audit_log
+    where table_name = 'church_member_congregations' and church_id = 'a0000000-0000-4000-8000-000000000000'$$,
   $$values ('insert', 'e0000000-0000-4000-8000-0000000000a3'::uuid)$$,
   'church_member_congregations writes are audited by member_id'
 );
