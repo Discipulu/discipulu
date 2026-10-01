@@ -26,8 +26,12 @@ function readCredentials(formData: FormData) {
   return { email, password };
 }
 
-function toMessage(code: string | undefined) {
-  return (code && ERROR_MESSAGES[code]) || "Não foi possível concluir. Tente de novo.";
+function toMessage(error: { code?: string; message: string }) {
+  const message = error.code && ERROR_MESSAGES[error.code];
+  if (message) return message;
+
+  console.error("auth: unexpected error", error.code, error.message);
+  return "Não foi possível concluir. Tente de novo.";
 }
 
 export async function signIn(_prev: AuthFormState, formData: FormData): Promise<AuthFormState> {
@@ -39,7 +43,7 @@ export async function signIn(_prev: AuthFormState, formData: FormData): Promise<
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) {
-    return { error: toMessage(error.code) };
+    return { error: toMessage(error) };
   }
 
   redirect("/app");
@@ -62,7 +66,7 @@ export async function signUp(_prev: AuthFormState, formData: FormData): Promise<
     options: { emailRedirectTo: origin ? `${origin}/auth/callback` : undefined },
   });
   if (error) {
-    return { error: toMessage(error.code) };
+    return { error: toMessage(error) };
   }
 
   if (data.session) {
