@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -17,11 +18,35 @@ type AuthFormProps = {
 export function AuthForm({ action, submitLabel, passwordAutoComplete }: AuthFormProps) {
   const [state, formAction, pending] = useActionState(action, {});
 
+  if (state.confirmationSentTo) {
+    return (
+      <div role="status" className="grid gap-3 rounded-lg border p-6">
+        <h2 className="text-lg font-semibold">Confira seu e-mail</h2>
+        <p className="text-sm text-muted-foreground">
+          Enviamos um link de confirmação para{" "}
+          <span className="font-medium text-foreground">{state.confirmationSentTo}</span>. Abra o
+          link para ativar a conta. Se não encontrar, olhe também a caixa de spam.
+        </p>
+        <Link href="/login" className="text-sm underline underline-offset-4">
+          Já confirmei, quero entrar
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <form action={formAction} className="grid gap-4">
       <div className="grid gap-2">
         <Label htmlFor="email">E-mail</Label>
-        <Input id="email" name="email" type="email" autoComplete="email" required />
+        <Input
+          id="email"
+          name="email"
+          type="email"
+          autoComplete="email"
+          defaultValue={state.email}
+          key={state.email}
+          required
+        />
       </div>
       <div className="grid gap-2">
         <Label htmlFor="password">Senha</Label>
@@ -36,11 +61,6 @@ export function AuthForm({ action, submitLabel, passwordAutoComplete }: AuthForm
       {state.error && (
         <p role="alert" className="text-sm text-destructive">
           {state.error}
-        </p>
-      )}
-      {state.message && (
-        <p role="status" className="text-sm text-muted-foreground">
-          {state.message}
         </p>
       )}
       <Button type="submit" disabled={pending}>
