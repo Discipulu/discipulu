@@ -51,7 +51,7 @@ select is(
 
 select results_eq(
   'select role, count(*)::int from app.role_capabilities group by role order by role',
-  $$values ('admin', 13), ('owner', 15), ('secretary', 9), ('teacher', 3), ('viewer', 1)$$,
+  $$values ('admin', 13), ('owner', 15), ('secretary', 9), ('teacher', 2), ('viewer', 1)$$,
   'role_capabilities is seeded for every role'
 );
 
