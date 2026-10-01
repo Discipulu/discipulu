@@ -34,7 +34,10 @@ describe("signIn", () => {
   });
 
   it("asks for email and password", async () => {
-    expect(await signIn({}, form({ email: " " }))).toEqual({ error: "Informe e-mail e senha." });
+    expect(await signIn({}, form({ email: " " }))).toEqual({
+      email: "",
+      error: "Informe e-mail e senha.",
+    });
     expect(auth.signInWithPassword).not.toHaveBeenCalled();
   });
 
@@ -45,7 +48,7 @@ describe("signIn", () => {
 
     const state = await signIn({}, form({ email: "ana@exemplo.test", password: "errada123" }));
 
-    expect(state).toEqual({ error: "E-mail ou senha incorretos." });
+    expect(state).toEqual({ email: "ana@exemplo.test", error: "E-mail ou senha incorretos." });
     expect(auth.signInWithPassword).toHaveBeenCalledWith({
       email: "ana@exemplo.test",
       password: "errada123",
@@ -60,7 +63,10 @@ describe("signIn", () => {
 
     const state = await signIn({}, form({ email: "ana@exemplo.test", password: "senha1234" }));
 
-    expect(state).toEqual({ error: "Não foi possível concluir. Tente de novo." });
+    expect(state).toEqual({
+      email: "ana@exemplo.test",
+      error: "Não foi possível concluir. Tente de novo.",
+    });
     expect(log).toHaveBeenCalled();
     log.mockRestore();
   });
@@ -82,7 +88,10 @@ describe("signUp", () => {
   it("rejects short passwords before calling Supabase", async () => {
     const state = await signUp({}, form({ email: "ana@exemplo.test", password: "1234567" }));
 
-    expect(state).toEqual({ error: "A senha precisa ter pelo menos 8 caracteres." });
+    expect(state).toEqual({
+      email: "ana@exemplo.test",
+      error: "A senha precisa ter pelo menos 8 caracteres.",
+    });
     expect(auth.signUp).not.toHaveBeenCalled();
   });
 
@@ -91,7 +100,7 @@ describe("signUp", () => {
 
     const state = await signUp({}, form({ email: "ana@exemplo.test", password: "senha1234" }));
 
-    expect(state).toEqual({ message: "Enviamos um link de confirmação para o seu e-mail." });
+    expect(state).toEqual({ confirmationSentTo: "ana@exemplo.test" });
     expect(auth.signUp).toHaveBeenCalledWith({
       email: "ana@exemplo.test",
       password: "senha1234",

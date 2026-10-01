@@ -6,8 +6,9 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
 export type AuthFormState = {
+  email?: string;
   error?: string;
-  message?: string;
+  confirmationSentTo?: string;
 };
 
 const MIN_PASSWORD_LENGTH = 8;
@@ -37,13 +38,13 @@ function toMessage(error: { code?: string; message: string }) {
 export async function signIn(_prev: AuthFormState, formData: FormData): Promise<AuthFormState> {
   const { email, password } = readCredentials(formData);
   if (!email || !password) {
-    return { error: "Informe e-mail e senha." };
+    return { email, error: "Informe e-mail e senha." };
   }
 
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) {
-    return { error: toMessage(error) };
+    return { email, error: toMessage(error) };
   }
 
   redirect("/app");
@@ -52,10 +53,10 @@ export async function signIn(_prev: AuthFormState, formData: FormData): Promise<
 export async function signUp(_prev: AuthFormState, formData: FormData): Promise<AuthFormState> {
   const { email, password } = readCredentials(formData);
   if (!email || !password) {
-    return { error: "Informe e-mail e senha." };
+    return { email, error: "Informe e-mail e senha." };
   }
   if (password.length < MIN_PASSWORD_LENGTH) {
-    return { error: ERROR_MESSAGES.weak_password };
+    return { email, error: ERROR_MESSAGES.weak_password };
   }
 
   const origin = (await headers()).get("origin");
@@ -66,14 +67,14 @@ export async function signUp(_prev: AuthFormState, formData: FormData): Promise<
     options: { emailRedirectTo: origin ? `${origin}/auth/callback` : undefined },
   });
   if (error) {
-    return { error: toMessage(error) };
+    return { email, error: toMessage(error) };
   }
 
   if (data.session) {
     redirect("/app");
   }
 
-  return { message: "Enviamos um link de confirmação para o seu e-mail." };
+  return { confirmationSentTo: email };
 }
 
 export async function signOut() {
