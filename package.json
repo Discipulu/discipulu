@@ -9,6 +9,8 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
+    "test": "vitest run",
+    "test:db": "supabase test db tests/db",
     "format": "prettier --write . --ignore-path .gitignore --ignore-path .prettierignore --ignore-path .git/info/exclude",
     "format:check": "prettier --check . --ignore-path .gitignore --ignore-path .prettierignore --ignore-path .git/info/exclude",
     "storybook": "storybook dev -p 6006",
@@ -44,7 +46,8 @@
     "storybook": "10.6.0",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vite": "^8.3.1"
+    "vite": "^8.3.1",
+    "vitest": "^5.0.3"
   },
   "engines": {
     "node": ">=22"
