@@ -53,3 +53,21 @@ jobs:
           version: 2.119.0
       - run: supabase db start
       - run: supabase test db tests/db
+
+  types:
+    name: Database types up to date
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3.0.0
+        with:
+          runtime: node@22
+          cache: true
+          require-lockfile: true
+      - uses: supabase/setup-cli@45a513f8c64c0bc8e0e3dfe572b5c95be85f6359 # v3.0.1
+        with:
+          version: 2.119.0
+      - run: supabase db start
+      - run: pnpm db:types
+      - name: Generated types match the migrations (run pnpm db:types and commit)
+        run: git diff --exit-code -- src/lib/supabase/database.types.ts
