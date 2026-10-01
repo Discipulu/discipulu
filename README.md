@@ -31,6 +31,8 @@ Preencha o `.env.local` com a `Project URL` e a chave `Publishable` que o `supab
 | ---------------------- | ------------------------------------ |
 | `pnpm lint`            | ESLint                               |
 | `pnpm typecheck`       | Gera os tipos de rota e roda o `tsc` |
+| `pnpm test`            | Testes unitários (Vitest)            |
+| `pnpm test:db`         | Testes de banco e RLS (pgTAP)        |
 | `pnpm format`          | Formata com Prettier                 |
 | `pnpm format:check`    | Confere a formatação sem alterar     |
 | `pnpm build`           | Build de produção do Next.js         |
@@ -43,6 +45,8 @@ Estrutura de `src/`:
 - `components/` — componentes compartilhados; `components/ui/` são os do shadcn/ui
 - `lib/` — utilitários e clientes compartilhados; `lib/supabase/` tem os clientes de browser, servidor e proxy de sessão
 - `proxy.ts` — renova a sessão a cada requisição e protege `/app`
+
+Testes ficam em `tests/`: `unit/` (Vitest) e `db/` (pgTAP, rodados pelo `supabase test db` contra o banco local — precisa do `supabase start` ou `supabase db start`).
 
 ## Rodando em Docker
 
@@ -61,7 +65,7 @@ As variáveis `NEXT_PUBLIC_*` entram no build (vão para o JavaScript do navegad
 
 ## Contribuindo
 
-Contribuições externas ainda não estão abertas. Quando estiverem, o processo (incluindo o CLA) será descrito em `CONTRIBUTING.md`. Até lá, bugs e sugestões são bem-vindos como issues.
+Leia o [CONTRIBUTING.md](CONTRIBUTING.md) antes de abrir um PR: abra uma issue primeiro e aceite o [CLA](CLA.md) no primeiro PR. Vulnerabilidades vão pelo reporte privado descrito no [SECURITY.md](SECURITY.md). O projeto segue o [Código de Conduta](CODE_OF_CONDUCT.md).
 
 ## Licença
 
