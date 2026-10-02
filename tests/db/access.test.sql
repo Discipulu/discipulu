@@ -51,7 +51,7 @@ select is(
 
 select results_eq(
   'select role, count(*)::int from app.role_capabilities group by role order by role',
-  $$values ('admin', 13), ('owner', 15), ('secretary', 9), ('teacher', 3), ('viewer', 1)$$,
+  $$values ('admin', 14), ('owner', 16), ('secretary', 10), ('teacher', 3), ('viewer', 1)$$,
   'role_capabilities is seeded for every role'
 );
 
@@ -318,7 +318,8 @@ select results_eq(
 );
 
 select results_eq(
-  $$select action, record_id from app.audit_log where table_name = 'church_member_congregations'$$,
+  $$select action, record_id from app.audit_log
+    where table_name = 'church_member_congregations' and church_id = 'a0000000-0000-4000-8000-000000000000'$$,
   $$values ('insert', 'e0000000-0000-4000-8000-0000000000a3'::uuid)$$,
   'church_member_congregations writes are audited by member_id'
 );
